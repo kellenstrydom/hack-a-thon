@@ -3,25 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="desription" content="Parliment Bot">
-    <meta name="author" content="topsandbottoms">
-    <title>Parl Bot</title>
-    <link rel="stylesheet" href="styles/mainstyle.css">
+    <title>Dynamic Flexbox with Multiple JSON Files</title>
+    <style>
+        .top-head{
+            text-align: center;
+            font-size: 50pt;
+        }
+        .feature_section {
+            padding: 20px;
+        }
+        .service_container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .col-lg-3, .col-sm-6 {
+            flex: 1 1 25%; /* Responsive flexbox */
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .box {
+            background-color: #d2ed98;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+        .number_box h5 {
+            font-size: 24px;
+            color: #333;
+        }
+        h4 {
+            font-size: 20px;
+            color: #555;
+        }
+        p {
+            font-size: 16px;
+            color: #666;
+            margin-top: 10px;
+            display: none; /* Hide the text initially */
+        }
+        .controls {
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: larger;
+        }
+        .gif
+        {
+            width: 500px;
+            margin: auto;
+        }
+
+        html{
+            background-color: #fffbea;
+            opacity: 1;
+            background-image:  radial-gradient(#395d0e 1.35px, transparent 1.35px), radial-gradient(#395d0e 1.35px, #fffbea 1.35px);
+            background-size: 54px 54px;
+            background-position: 0 0,27px 27px;
+        }
+    </style>
 </head>
 <body>
 
+    <div class="gif">
+        <div class="tenor-gif-embed" data-postid="17381898" data-share-method="host" data-aspect-ratio="1.18959" data-width="100%"><a href="https://tenor.com/view/wearing-mask-cover-eyes-dont-see-mask-on-mask-gif-17381898">Wearing Mask Cover Eyes GIF</a>from <a href="https://tenor.com/search/wearing+mask-gifs">Wearing Mask GIFs</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+    </div>
+    
     <header>
-        <h1>Parl Bot</h1>
+        <h1 class="top-head">Parlimentary Happenings</h1>
     </header>
 
-    <div class="middle">
-        <div class="block-display">
-            <h2>Test
-            </h2>
-        </div>
 
+<div class="controls">
+    <!-- Dropdown for selecting the JSON file -->
+    <label for="jsonSelector">Choose province: </label>
+    <select id="jsonSelector">
+        <option value="/jsons/data1.json">data set 1</option>
+        <option value="/jsons/gauteng.json">Gauteng</option>
+        <option value="/jsons/westerncape.json">Western Cape</option>
+        <option value="/jsons/kzn.json">KZN</option>
+        <option value="data2.json">Data Set 2</option>
+    </select>
+</div>
+
+<section class="feature_section">
+    <div class="container-fluid service_container" id="flexBoxContainer">
+        <!-- Flexbox items will be dynamically inserted here -->
     </div>
+</section>
 
+<script>
+    // Function to fetch data from the selected JSON file and populate flexbox
+    async function fetchData(jsonFile) {
+        try {
+            // Fetch the selected JSON file
+            const response = await fetch(jsonFile);
+            const items = await response.json();
+
+            // Reference to the flexbox container
+            const container = document.getElementById('flexBoxContainer');
+            container.innerHTML = ''; // Clear previous content
+
+            // Loop through the items and create HTML structure dynamically
+            items.forEach(item => {
+                const colDiv = document.createElement('div');
+                colDiv.className = 'col-lg-3 col-sm-6';
+
+                const boxDiv = document.createElement('div');
+                boxDiv.className = 'box';
+
+                const numberBoxDiv = document.createElement('div');
+                numberBoxDiv.className = 'number_box';
+
+                const h5 = document.createElement('h5');
+                h5.innerText = item.number;
+
+                const h4 = document.createElement('h4');
+                h4.innerText = item.title;
+
+                const p = document.createElement('p');
+                p.innerText = item.text; // Display the new "text" field
+                p.style.display = 'none'; // Initially hide the text
+
+                // Toggle the visibility of the text when the box is clicked
+                boxDiv.addEventListener('click', () => {
+                    if (p.style.display === 'none') {
+                        p.style.display = 'block'; // Show the text
+                    } else {
+                        p.style.display = 'none'; // Hide the text
+                    }
+                });
+
+                numberBoxDiv.appendChild(h5);
+                boxDiv.appendChild(numberBoxDiv);
+                boxDiv.appendChild(h4);
+                boxDiv.appendChild(p); // Append the paragraph for the text (initially hidden)
+                colDiv.appendChild(boxDiv);
+                container.appendChild(colDiv);
+            });
+        } catch (error) {
+            console.error('Error fetching the JSON data:', error);
+        }
+    }
+
+    // Listen for changes in the dropdown and load the corresponding JSON file
+    document.getElementById('jsonSelector').addEventListener('change', (event) => {
+        const selectedFile = event.target.value;
+        fetchData(selectedFile); // Load the selected JSON file
+    });
+
+    // Initially load the first JSON file (default)
+    fetchData('data1.json');
+</script>
 
 </body>
 </html>
