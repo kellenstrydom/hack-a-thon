@@ -27,6 +27,8 @@
             text-align: center;
             border: 1px solid #ddd;
             cursor: pointer;
+
+            min-height: 100pt;
         }
         .number_box h5 {
             font-size: 24px;
@@ -134,7 +136,7 @@
                 });
 
                 numberBoxDiv.appendChild(h5);
-                boxDiv.appendChild(numberBoxDiv);
+                // boxDiv.appendChild(numberBoxDiv);
                 boxDiv.appendChild(h4);
                 boxDiv.appendChild(p); // Append the paragraph for the text (initially hidden)
                 colDiv.appendChild(boxDiv);
